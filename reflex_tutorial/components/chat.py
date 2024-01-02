@@ -1,7 +1,7 @@
 import reflex as rx
 
 from reflex_tutorial.styles import style
-
+from reflex_tutorial.states.answer_state import AnswerState
 
 def qa(question: str, answer: str) -> rx.Component:
     return rx.box(
@@ -24,19 +24,9 @@ def qa(question: str, answer: str) -> rx.Component:
 
 
 def chat() -> rx.Component:
-    qa_pairs = [
-        (
-            "What is Reflex?",
-            "A way to build web apps in pure Python!",
-        ),
-        (
-            "What can I make with it?",
-            "Anything from a simple website to a complex web app!",
-        ),
-    ]
     return rx.box(
-        *[
-            qa(question, answer)
-            for question, answer in qa_pairs
-        ]
+        rx.foreach(
+            AnswerState.chat_history,
+            lambda messages: qa(messages[0], messages[1]),
+        ),
     )
